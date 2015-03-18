@@ -8,14 +8,16 @@ import java.util.ListIterator;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 public class Program {
 	
-	private static final int COUNT_DEALS = 2; //кол-во сделок
-	private static final int MAX_PRODUCTS = 2; //кол-во продуктов в одной сделке!
+	private static final int COUNT_DEALS = 1; //кол-во сделок
+	private static final int MAX_PRODUCTS = 4; //кол-во продуктов в одной сделке!
 	private static final int MAX_KEYVALUES = 2; //кол-во ключей Key Values
 	private int quantity;
 	Collection <Deal> deals = new ArrayList <Deal>();              //Коллекция всех сделок в виде ArrayList
-	List <Product> allproducts = new LinkedList <Product>(); //Коллекция всех продуктов LinkedList
+	List <Product> allproducts = new LinkedList <Product>(); //Коллекция/хранилище всех продуктов LinkedList
 	
 	public static void main(String[] args) {
 		new Program().allActions();
@@ -48,15 +50,15 @@ public class Program {
 	private void output(){
 		
 		int i = 0;
-		int numberDeals = 1;
-		int numberProducts = 1;
+		int numberDeals = 1;     //Счетчик выводимых сделок
+		int numberProducts = 1;  //Счетчик выводимых продуктов
 				
 		for (Deal d:deals){
 			
 			System.out.println();
 			System.out.println("========== Вывод сделки №:" + numberDeals + " ============");
 			numberDeals ++;
-			System.out.println("Deal " + d.getDate());
+			System.out.println("Deal: " + d.getDate());
 			System.out.println("----------------------------------");
 			System.out.println("Buyers Name: " + d.getBuyer().getName());
 			System.out.println("Buyers Address : " + d.getBuyer().getAddress());	
@@ -81,7 +83,7 @@ public class Program {
 			System.out.println(d.getBuyer().getName() + " buys in " + d.getSeller().getName() + ":");
 			System.out.println();
 			
-			//вывод продуктов текущей сделки
+			//вывод продуктов текущей сделки---------------------------------------------------------
 			for(Entry <Product, Integer> entry:d.getProducts().entrySet()){
 				
 				Product product = entry.getKey();
@@ -104,10 +106,11 @@ public class Program {
 					System.out.println("Размер ботинок:  " + product.getSize());
 					System.out.println("Цвет ботинок:  " + product.getColor());  
 				}
-				System.out.println("Title:  " + product.getTitle() + "  Price:  " + product.getPrice() + "  Q-ty:  " + quantity + "  Cost: " + product.getCost(quantity));		
-			}			
+				System.out.println("Title:  " + product.getTitle() + "  Price:  " + product.getPrice() + "  Q-ty:  " + quantity + "  Amount: " + product.getCost(quantity));		
+			}		
+			
 			System.out.println("----------------------------------");
-		    System.out.println("Общая сумма сделки: " + d.getSum());	    
+		    System.out.println("Общая сумма сделки (Total Amount): " + d.getSum());	    
 		}
 	}
 	
@@ -122,6 +125,7 @@ public class Program {
 			
 			Product pr = inputProduct();
 		    d.getProducts().put(pr, quantity); // ссылку на объект Product и его кол-во добавляем в коллекцию Map текущей сделки
+		    System.out.println("Проверка на то что продукт появился в текущей сделке" + d.getProducts().toString()); //тест!!!
 			allproducts.add(pr); //ссылку на объект Product добавляем в общую коллекцию Products (всех сделок)
 			System.out.println("----------------------------------");
 			
@@ -153,7 +157,7 @@ public class Program {
 	
 	private Product inputProduct(){
 		
-		int i = 0;
+		int choiseProduct = 0;
 		String typeProducts; 
 		int previousProduct = 2; // по умолчанию значение 2 - продукт будет вводится по-новой, если 1 - то используется продукт, который был введен ранее
 		Product pr = null; //заглушка, чтобы обращение ниже а-ля pr.setTitle(title) не выбивало ошибку в Эклипсе
@@ -162,11 +166,12 @@ public class Program {
 		System.out.println("Ввод нового продукта текущей сделки.");
 		
 		//Блок выбора продукта - старый продукт выбираем или новый вводим
-		//Сначала проверяем не пустой ли список продуктов
-		if (!allproducts.isEmpty()){   
+		if (!allproducts.isEmpty()){                                  //Сначала проверяем не пустой ли список продуктов
 			
 			System.out.println("Будет использоваться ранее введенный продукт? Введите: 1-Да, 2-Нет");
 			previousProduct = Integer.valueOf(keyboard("aa", false));
+			
+			//Блок выбора существующего продукта
 			if (previousProduct == 1) {
 				System.out.println("Выберите из списка номер ранее введенного продукта:");
 				ListIterator <Product> itr = allproducts.listIterator();
@@ -176,20 +181,20 @@ public class Program {
 					pr = itr.next();
 					if (pr.getType_of_product() == 1) typeProducts = "Фотоаппарат";
 					else typeProducts = "Ботинки";
-					System.out.println("Продукт №" + (i + 1) + ": " + typeProducts + "  Title: " + pr.getTitle() + "  Price: " + pr.getPrice());
-					i++;				
+					System.out.println("Продукт №" + (choiseProduct + 1) + ": " + typeProducts + "  Title: " + pr.getTitle() + "  Price: " + pr.getPrice());
+					choiseProduct++;				
 				}
 				System.out.println("Ваш выбор:");
-				i = Integer.valueOf(keyboard("aa", false));
+				choiseProduct = Integer.valueOf(keyboard("aa", false));
 				//Проверка что номер выбора ранее веденного продукта корректен
-				if (i > allproducts.size() || i <= 0) {
+				if (choiseProduct > allproducts.size() || choiseProduct <= 0) {
 					
 					System.err.println("Неизвестный продукт!");
 					System.exit(-1);
 				}
 				
 				//Добавляем ссылку на ранее введенный продукт
-				pr = allproducts.get(i - 1);
+				pr = allproducts.get(choiseProduct - 1);
 								
 			} else if (previousProduct != 2) {
 				
@@ -199,19 +204,19 @@ public class Program {
 				
 		}
 
-		//Блок ввода нового продукта
-		if (previousProduct == 2){
+		   //Блок ввода нового продукта
+		   if (previousProduct == 2){
 						
-	       System.out.print("Сделка по купле/продаже: -фотиков (нажмите 1) или -ботинок (нажмите 2)");
-		   int type_of_product = Integer.valueOf(keyboard("aa", false)); //тип продукта - 1 - фотики или 2- ботинки 
+	         System.out.print("Сделка по купле/продаже: -фотиков (нажмите 1) или -ботинок (нажмите 2)");
+		     int type_of_product = Integer.valueOf(keyboard("aa", false)); //тип продукта - 1 - фотики или 2- ботинки 
 		
-		   if (type_of_product == 1){
+		       if (type_of_product == 1){
 			
 			FotoProduct fotoPr = new FotoProduct();
 			String megapx = keyboard("кол-во мегапикселей фотоаппарата", true);
-			String digital = keyboard("тип фотоаппарата: 1 - цифровой, 0- пленочный", true);
+			int digital = Integer.valueOf(keyboard("тип фотоаппарата: 1 - цифровой, 0- пленочный", true));
 			fotoPr.setMegapx(Double.valueOf(megapx));
-			fotoPr.setDigital(Boolean.valueOf(digital));
+			fotoPr.setDigital(BooleanUtils.toBoolean(digital));
 			fotoPr.setType_of_product(1);
 			
 			pr = fotoPr;
