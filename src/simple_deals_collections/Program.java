@@ -12,9 +12,9 @@ import org.apache.commons.lang3.BooleanUtils;
 
 public class Program {
 	
-	private static final int COUNT_DEALS = 1; //кол-во сделок
-	private static final int MAX_PRODUCTS = 4; //кол-во продуктов в одной сделке!
-	private static final int MAX_KEYVALUES = 2; //кол-во ключей Key Values
+	//private static final int COUNT_DEALS = 2; //кол-во сделок
+	//private static final int MAX_PRODUCTS = 4; //кол-во продуктов в одной сделке!
+	//private static final int MAX_KEYVALUES = 2; //кол-во ключей Key Values
 	private int quantity;
 	Collection <Deal> deals = new ArrayList <Deal>();              //Коллекция всех сделок в виде ArrayList
 	List <Product> allproducts = new LinkedList <Product>(); //Коллекция/хранилище всех продуктов LinkedList
@@ -32,21 +32,31 @@ public class Program {
 	
 	private void input(){
 	
-		int tail = 0;
+		int tail = 1; //счеткчик сделок
 		Deal d;
 		
-		while (tail < COUNT_DEALS){
+		while (tail != 0){
 			
 		System.out.println();	
-		System.out.println("Сделка №" + (tail + 1));
+		System.out.println("Сделка №" + (tail));
 		d = inputDeal();   //вызов очередной сделки
 		deals.add(d);      //добавляем сделку в коллекцию сделок
 		tail++;
+		
+		if (!continueInputQuestion("одну сделку")) tail = 0; // проверка - хотим ли мы вводить новую сделку?
 		
 		}
 		
 	}
 	
+	private boolean continueInputQuestion(String string) {
+		System.out.println("Введем еще " + string + "? (y - Yes, n - No)");
+		String answer = keyboard(string, false);
+		if (answer.equalsIgnoreCase("y")) return true;
+		else return false;
+		
+	}
+
 	private void output(){
 		
 		int i = 0;
@@ -121,13 +131,14 @@ public class Program {
 		
 		Deal d = new Deal(seller, buyer); //в одной сделке 3 обьекта - Party: buyer,seller,  и Product: массив объектов Product
 					
-		for (int i = 0; i < MAX_PRODUCTS ; i++){
+		while (true){
 			
 			Product pr = inputProduct();
 		    d.getProducts().put(pr, quantity); // ссылку на объект Product и его кол-во добавляем в коллекцию Map текущей сделки
-		    System.out.println("Проверка на то что продукт появился в текущей сделке" + d.getProducts().toString()); //тест!!!
 			allproducts.add(pr); //ссылку на объект Product добавляем в общую коллекцию Products (всех сделок)
 			System.out.println("----------------------------------");
+			
+			if(!continueInputQuestion("один продукт")) break; //выход с цикла если не хотим больше новых продуктов  
 			
 		}	 	
 		
@@ -141,11 +152,15 @@ public class Program {
 			
 			Party parties = new Party();
 			
-			for (int i = 0; i < MAX_KEYVALUES; i++){
+			int i = 1;
+			while (true){
 				
-				String keys = keyboard(party + "`s " + "key" + (i + 1), true);
-				String values = keyboard(party + "`s " + "value" + (i + 1), true);
+				String keys = keyboard(party + "`s " + "key" + i, true);
+				String values = keyboard(party + "`s " + "value" + i, true);
 				parties.getKeyValues().put(keys, values);
+                i++;							
+				
+				if (!continueInputQuestion("пару Key - Value")) break;
 				
 			}
 				
