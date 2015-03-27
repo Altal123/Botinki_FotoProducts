@@ -190,7 +190,7 @@ public class Program {
 			if (previousProduct == 1) {
 				System.out.println("Выберите из списка номер ранее введенного продукта:");
 				ListIterator <Product> itr = allproducts.listIterator();
-
+				
 				while (itr.hasNext()){
 					
 					pr = itr.next();
