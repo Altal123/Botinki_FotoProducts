@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+//Находясь в корне проектной директории запускаем с командной строки: java -classpath ./bin;./lib/commons-io-2.4.jar io.SimpleFilesCopySorting aa.txt bb.txt asc/desc
+//указываем интерпретатору, что наш исполняемый класс надо искать в директории ./bin, а также указываем путь к библиотеке commons-io-2.4.jar
+
 public class SimpleFilesCopySorting {
 
 	public static void main(String[] args) {
@@ -17,8 +20,6 @@ public class SimpleFilesCopySorting {
 		
 		
 		String direction = "asc"; //asc - восходящая сортировка, desc - нисходящая
-		
-		System.out.println(args.length);
 		
 		if (args.length == 3){
 			
@@ -50,9 +51,8 @@ public class SimpleFilesCopySorting {
 		
 	}
 	
-	public static List<String> sortingBySize(List<String> content, String direction) {
-		
-		//Сортировка методом вставок строк - от минимальной до максимальной длины
+	public static List<String> sortingBySize(List<String> content, String direction) {		
+		//Сортировка методом вставок строк - от минимальной до максимальной длины (или наоборот)
 		
 		int index; 
 		String temp;

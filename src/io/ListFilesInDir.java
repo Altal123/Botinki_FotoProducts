@@ -25,7 +25,7 @@ public class ListFilesInDir {
 		
 		for(File f:files){
 			
-			   if(f.isFile()) System.out.println(f.getAbsolutePath());
+			   if(f.isFile()) System.out.println(f.getName());
 			  
 			   else{
 				   
