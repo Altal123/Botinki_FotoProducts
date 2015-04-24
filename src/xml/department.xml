@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<company id = "1">
+	<departments>
+             <department>
+		<name>yong</name>
+		<worker>mook kim</worker>
+		<nickname>mkyong</nickname>
+		<salary>100000</salary>
+	     </department>
+             <department>
+		<name>low</name>
+		<worker id ="2">ivan</worker>
+		<nickname ds = "ede dcd" kuku = "34dd">fong fong</nickname>
+		<salary>200000</salary>
+             </department>
+	</departments>
+</company>
