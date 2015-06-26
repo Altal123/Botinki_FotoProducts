@@ -1,5 +1,7 @@
 package simple_deals_collections_jaxb;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class FotoProduct extends Product {
 	
 	private static final int DISCOUNT_FOR_NON_DIGITAL = 20; //скидка для пленочных фотиков
@@ -12,6 +14,7 @@ public class FotoProduct extends Product {
 		return digital;
 	}
 
+	@XmlElement
 	public void setDigital(boolean digital) {
 		this.digital = digital;
 	}
@@ -21,6 +24,7 @@ public class FotoProduct extends Product {
 		return megapx;
 	}
 
+	@XmlElement
 	public void setMegapx(double megapx) {
 		this.megapx = megapx;
 	}

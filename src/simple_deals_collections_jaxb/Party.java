@@ -3,6 +3,8 @@ package simple_deals_collections_jaxb;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class Party {
 	
 	private String name;
@@ -13,6 +15,7 @@ public class Party {
 		return name;
 	}
 
+	@XmlElement
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -21,6 +24,7 @@ public class Party {
 		return address;
 	}
 
+	@XmlElement
 	public void setAddress(String address) {
 		this.address = address;
 	}

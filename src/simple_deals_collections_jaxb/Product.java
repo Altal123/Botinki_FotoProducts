@@ -1,5 +1,7 @@
 package simple_deals_collections_jaxb;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public abstract class Product {
 	
 	public static final int DEF_DISCOUNT = 10; // константа, процент скидки на товар кол-вом > 10
@@ -17,6 +19,7 @@ public abstract class Product {
 	/** 
 	 * @param title the title to set
 	 */
+	@XmlElement
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -29,6 +32,7 @@ public abstract class Product {
 	/**
 	 * @param price the price to set
 	 */
+	@XmlElement
 	public void setPrice(double price) {
 		this.price = price;
 	}
@@ -41,6 +45,7 @@ public abstract class Product {
 	/**
 	 * @param type_of_product the type_of_product to set
 	 */
+	@XmlElement
 	public void setType_of_product(int type_of_product) {
 		this.type_of_product = type_of_product;
 	}

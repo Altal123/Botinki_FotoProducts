@@ -5,13 +5,26 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Deal {
 
 	private Date date;
+	
+	@XmlElement
 	private Party seller;
+	
+	@XmlElement
 	private Party buyer;
+	
+	@XmlElement
 	private int quantity;
-	//private Product[] products; //храним массив продуктов, которые добавляются в текущую сделку
+	
+	@XmlElementWrapper(name = "products")
+	@XmlElement
 	Map <Product, Integer> products = new LinkedHashMap<Product, Integer>(); //коллекция продуктов
 	
 	public Deal(Party seller, Party buyer){                   // конструктор

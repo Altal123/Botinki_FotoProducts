@@ -1,5 +1,6 @@
 package simple_deals_collections_jaxb;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -9,6 +10,9 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.BooleanUtils;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 public class Program {
 	
@@ -27,12 +31,13 @@ public class Program {
 		input();
 		System.out.println("================================");
 		System.out.println("================================");
+		jaxbMarshalling();
 		output();
 	}
 	
 	private void input(){
 	
-		int tail = 1; //счеткчик сделок
+		int tail = 1; //счетчик сделок
 		Deal d;
 		
 		while (tail != 0){
@@ -273,6 +278,32 @@ public class Program {
 	     String rez = scan.next(); 
 	     scan.reset(); 
 	     return rez; 
+	}
+	
+	private void jaxbMarshalling() {
+		
+		
+		try {
+		File file = new File("d:\\3\\Product.xml");
+		
+		if (file.exists()) file.delete();
+		
+		file.createNewFile();
+		
+		JAXBContext jaxbContext = JAXBContext.newInstance(new Class[]{Deal.class, Product.class, FotoProduct.class, BotinkiProduct.class,Party.class});
+		
+		Marshaller mar = jaxbContext.createMarshaller();
+		
+		mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		
+		mar.marshal(jaxbContext, file);
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 }
