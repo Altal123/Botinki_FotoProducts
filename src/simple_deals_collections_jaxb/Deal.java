@@ -5,26 +5,25 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "deal")
+@XmlAccessorType (XmlAccessType.FIELD)
 public class Deal {
 
 	private Date date;
-	
-	@XmlElement
-	private Party seller;
-	
-	@XmlElement
-	private Party buyer;
-	
-	@XmlElement
 	private int quantity;
 	
-	@XmlElementWrapper(name = "products")
-	@XmlElement
+	@XmlElement(name = "party")	
+	private Party seller;
+	private Party buyer;
+	
+//	@XmlElementWrapper(name = "products")
+//	@XmlElement
+	@XmlElement(name = "product")
 	Map <Product, Integer> products = new LinkedHashMap<Product, Integer>(); //коллекция продуктов
 	
 	public Deal(Party seller, Party buyer){                   // конструктор

@@ -20,32 +20,38 @@ public class Program {
 	//private static final int MAX_PRODUCTS = 4; //кол-во продуктов в одной сделке!
 	//private static final int MAX_KEYVALUES = 2; //кол-во ключей Key Values
 	private int quantity;
-	Collection <Deal> deals = new ArrayList <Deal>();              //Коллекция всех сделок в виде ArrayList
+	//Collection <Deal> deals = new ArrayList <Deal>();        //Коллекция всех сделок в виде ArrayList
 	List <Product> allproducts = new LinkedList <Product>(); //Коллекция/хранилище всех продуктов LinkedList
+	static Deals deals = new Deals();
 	
 	public static void main(String[] args) {
+		
 		new Program().allActions();
 	}
 
 	private void allActions() {
-		input();
-		System.out.println("================================");
-		System.out.println("================================");
+		
+		//input();
+//		System.out.println("================================");
+//		System.out.println("================================");
 		jaxbMarshalling();
-		output();
+		//output();
 	}
 	
 	private void input(){
 	
 		int tail = 1; //счетчик сделок
 		Deal d;
+		deals.setDeals(new ArrayList <Deal>());
 		
 		while (tail != 0){
 			
 		System.out.println();	
 		System.out.println("Сделка №" + (tail));
 		d = inputDeal();   //вызов очередной сделки
-		deals.add(d);      //добавляем сделку в коллекцию сделок
+		//deals.add(d);      //добавляем сделку в коллекцию сделок
+		deals.getDeals().add(d); //добавляем сделку в коллекцию сделок
+		
 		tail++;
 		
 		if (!continueInputQuestion("одну сделку")) tail = 0; // проверка - хотим ли мы вводить новую сделку?
@@ -68,7 +74,7 @@ public class Program {
 		int numberDeals = 1;     //Счетчик выводимых сделок
 		int numberProducts = 1;  //Счетчик выводимых продуктов
 				
-		for (Deal d:deals){
+		for (Deal d:deals.getDeals()){
 			
 			System.out.println();
 			System.out.println("========== Вывод сделки №:" + numberDeals + " ============");
@@ -282,6 +288,67 @@ public class Program {
 	
 	private void jaxbMarshalling() {
 		
+		deals.setDeals(new ArrayList <Deal>());
+		
+		//Party buyer
+		
+		String partyName = "Adidas";
+		String partyAddress = "Adidas Address 1";
+		
+		Party buyer = new Party();
+			
+		String keys = "11";
+		String values = "22";
+		String keys2 = "33";
+		String values2 = "44";
+		
+		buyer.getKeyValues().put(keys, values);
+		buyer.getKeyValues().put(keys2, values2);        					
+			
+		buyer.setName(partyName);
+		buyer.setAddress(partyAddress);
+		
+		//Party seller
+		
+		String partyName2 = "Adidas";
+		String partyAddress2 = "Adidas Address 1";
+		
+		Party seller = new Party();
+			
+		String keys3 = "11";
+		String values3 = "22";
+		String keys4 = "33";
+		String values4 = "44";
+		
+		seller.getKeyValues().put(keys3, values3);
+		seller.getKeyValues().put(keys4, values4);        					
+			
+		seller.setName(partyName2);
+		seller.setAddress(partyAddress2);
+		
+		Deal d = new Deal(seller, buyer); //в одной сделке 3 обьекта - Party: buyer,seller,  и Product: массив объектов Product
+		
+		//Product information
+		
+		FotoProduct fotoPr = new FotoProduct();
+		
+		fotoPr.setMegapx(Double.valueOf("16"));
+		fotoPr.setDigital(BooleanUtils.toBoolean(1));
+		fotoPr.setType_of_product(1);
+		
+		Product pr = fotoPr;
+		
+		String title = "Чобиток";
+	    String priceStr = "650";
+	    pr.setTitle(title);
+	    pr.setPrice(Double.valueOf(priceStr));		
+	
+	    String quantityStr = "3";	
+	    quantity = Integer.valueOf(quantityStr);
+			
+	    d.getProducts().put(pr, quantity); // ссылку на объект Product и его кол-во добавляем в коллекцию Map текущей сделки
+	
+	    deals.getDeals().add(d); //добавляем сделку в коллекцию сделок
 		
 		try {
 		File file = new File("d:\\3\\Product.xml");
@@ -290,13 +357,14 @@ public class Program {
 		
 		file.createNewFile();
 		
-		JAXBContext jaxbContext = JAXBContext.newInstance(new Class[]{Deal.class, Product.class, FotoProduct.class, BotinkiProduct.class,Party.class});
+		JAXBContext jaxbContext = JAXBContext.newInstance(Deals.class);
 		
 		Marshaller mar = jaxbContext.createMarshaller();
 		
 		mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		
-		mar.marshal(jaxbContext, file);
+		mar.marshal(deals, System.out);
+		//mar.marshal(deals, file);
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
